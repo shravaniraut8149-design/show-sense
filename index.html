@@ -1,0 +1,890 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Show Sense | Find Your Next Favourite</title>
+  <meta name="description" content="Discover movies, TV shows and books with Show Sense, your personal story recommendation assistant.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #100e11;
+      --surface: #1b171c;
+      --surface2: #251e25;
+      --text: #f8f0ec;
+      --muted: #b8aab2;
+      --accent: #d58b9a;
+      --accent2: #a95f76;
+      --border: #382c35;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* NAVIGATION */
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 7%;
+      background: rgba(16, 14, 17, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      gap: 20px;
+    }
+
+    .logo {
+      font-family: "Playfair Display", serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .nav-links a {
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 500px;
+      padding: 90px 7%;
+      display: flex;
+      align-items: center;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(16, 14, 17, 0.98) 0%,
+          rgba(16, 14, 17, 0.85) 45%,
+          rgba(16, 14, 17, 0.15) 100%
+        ),
+        linear-gradient(0deg, var(--bg), transparent 35%),
+        url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1800&q=85")
+        center/cover;
+    }
+
+    .hero-content {
+      max-width: 650px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Playfair Display", serif;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      margin: 20px 0;
+    }
+
+    h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .hero p {
+      color: #d0c4ca;
+      max-width: 500px;
+      font-size: 1.05rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent2);
+      color: white;
+      border: 1px solid var(--accent2);
+      padding: 12px 23px;
+      border-radius: 6px;
+      margin-top: 27px;
+      transition: 0.25s;
+    }
+
+    .button:hover {
+      background: var(--accent);
+      color: #211319;
+      transform: translateY(-2px);
+    }
+
+    /* COLLECTION */
+
+    .section {
+      padding: 65px 7%;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin-top: 8px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 7px;
+    }
+
+    .search-wrap {
+      max-width: 340px;
+      width: 100%;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--accent);
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .filter {
+      padding: 8px 17px;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      background: transparent;
+      color: var(--muted);
+      transition: 0.2s;
+    }
+
+    .filter.active,
+    .filter:hover {
+      color: white;
+      background: var(--accent2);
+      border-color: var(--accent2);
+    }
+
+    /* POSTER CARDS */
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 28px 18px;
+    }
+
+    .card {
+      min-width: 0;
+      transition: transform 0.25s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+    }
+
+    .poster {
+      position: relative;
+      overflow: hidden;
+      border-radius: 9px;
+      aspect-ratio: 2 / 3;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+    }
+
+    .poster img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s;
+    }
+
+    .card:hover .poster img {
+      transform: scale(1.045);
+    }
+
+    .poster-label {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(16, 14, 17, 0.88);
+      padding: 4px 9px;
+      font-size: 0.68rem;
+      border-radius: 20px;
+      color: #f8dce3;
+    }
+
+    .card h3 {
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    .card .meta {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 3px;
+    }
+
+    .no-results {
+      display: none;
+      padding: 30px 0;
+      color: var(--muted);
+    }
+
+    /* CHATBOT SECTION */
+
+    .chat-section {
+      padding: 75px 7%;
+      background:
+        radial-gradient(ellipse at top right, #462633 0%, transparent 55%),
+        #171217;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chat-layout {
+      max-width: 1150px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 45px;
+      align-items: center;
+    }
+
+    .chat-intro h2 {
+      font-size: clamp(2.1rem, 4vw, 3.4rem);
+      margin: 14px 0;
+    }
+
+    .chat-intro p {
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .feature {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+      color: #e8d9df;
+      font-size: 0.92rem;
+    }
+
+    .feature span {
+      color: var(--accent);
+    }
+
+    .chat-box {
+      background: #171319;
+      border: 1px solid #49333f;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 20px 70px #0005;
+    }
+
+    .chat-header {
+      padding: 19px 22px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--accent2);
+      font-size: 1.2rem;
+    }
+
+    .chat-header small {
+      display: block;
+      color: var(--muted);
+    }
+
+    /* Watsonx Orchestrate mount point */
+
+    #root {
+      width: 100%;
+      min-height: 450px;
+      background: #171319;
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 30px 7%;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+
+    footer strong {
+      color: var(--accent);
+      font-family: "Playfair Display", serif;
+    }
+
+    /* RESPONSIVE DESIGN */
+
+    @media (max-width: 1000px) {
+      .gallery {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .chat-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .navbar {
+        padding: 15px 5%;
+        flex-wrap: wrap;
+      }
+
+      .nav-links {
+        gap: 14px;
+        font-size: 0.82rem;
+        flex-wrap: wrap;
+      }
+
+      .hero {
+        padding: 75px 6%;
+        min-height: 430px;
+      }
+
+      .section,
+      .chat-section {
+        padding: 48px 5%;
+      }
+
+      .section-heading {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .search-wrap {
+        max-width: none;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 23px 13px;
+      }
+
+      .chat-layout {
+        gap: 28px;
+      }
+
+      #root {
+        min-height: 400px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+
+  <nav class="navbar">
+    <a href="#" class="logo">show<span>sense.</span></a>
+
+    <div class="nav-links">
+      <a href="#explore">Explore</a>
+      <a href="#movies">Movies</a>
+      <a href="#tvshows">TV Shows</a>
+      <a href="#books">Books</a>
+      <a href="#chatbot">Chatbot</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+
+  <header class="hero">
+    <div class="hero-content">
+      <div class="eyebrow">Your personal discovery space</div>
+
+      <h1>
+        Stories worth<br>
+        getting <em>lost in.</em>
+      </h1>
+
+      <p>
+        From unforgettable films to your next comfort show
+        and books that stay with you. Find your next favourite
+        story with Show Sense.
+      </p>
+
+      <a href="#explore" class="button">
+        Explore the collection ↗
+      </a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- MOVIES, TV SHOWS AND BOOKS -->
+
+    <section class="section" id="explore">
+
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">The collection</div>
+          <h2>Find your next favourite</h2>
+          <p>
+            Browse by title or choose the kind of story you love.
+          </p>
+        </div>
+
+        <div class="search-wrap">
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Search titles..."
+            aria-label="Search titles"
+          >
+        </div>
+      </div>
+
+      <div class="filters">
+        <button class="filter active" data-filter="all">Everything</button>
+        <button class="filter" data-filter="movie" id="movies">Movies</button>
+        <button class="filter" data-filter="tv" id="tvshows">TV Shows</button>
+        <button class="filter" data-filter="book" id="books">Books</button>
+      </div>
+
+      <div class="gallery" id="gallery">
+
+        <!-- MOVIES -->
+
+        <article class="card" data-type="movie" data-title="Interstellar">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+              alt="Interstellar movie poster"
+              loading="lazy"
+            >
+            <span class="poster-label">Movie</span>
+          </div>
+          <h3>Interstellar</h3>
+          <p class="meta">Sci-fi · Adventure</p>
+        </article>
+
+        <article class="card" data-type="movie" data-title="Inception">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg"
+              alt="Inception movie poster"
+              loading="lazy"
+            >
+            <span class="poster-label">Movie</span>
+          </div>
+          <h3>Inception</h3>
+          <p class="meta">Sci-fi · Thriller</p>
+        </article>
+
+        <article class="card" data-type="movie" data-title="Dune Part Two">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg"
+              alt="Dune Part Two movie poster"
+              loading="lazy"
+            >
+            <span class="poster-label">Movie</span>
+          </div>
+          <h3>Dune: Part Two</h3>
+          <p class="meta">Sci-fi · Adventure</p>
+        </article>
+
+        <article class="card" data-type="movie" data-title="The Batman">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
+              alt="The Batman movie poster"
+              loading="lazy"
+            >
+            <span class="poster-label">Movie</span>
+          </div>
+          <h3>The Batman</h3>
+          <p class="meta">Crime · Mystery</p>
+        </article>
+
+        <article class="card" data-type="movie" data-title="Everything Everywhere All at Once">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/w3LxiVYdWWRvEVdn5RYq6jIqkb1.jpg"
+              alt="Everything Everywhere All at Once poster"
+              loading="lazy"
+            >
+            <span class="poster-label">Movie</span>
+          </div>
+          <h3>Everything Everywhere</h3>
+          <p class="meta">Fantasy · Comedy</p>
+        </article>
+
+        <!-- TV SHOWS -->
+
+        <article class="card" data-type="tv" data-title="Stranger Things">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg"
+              alt="Stranger Things TV show poster"
+              loading="lazy"
+            >
+            <span class="poster-label">TV Show</span>
+          </div>
+          <h3>Stranger Things</h3>
+          <p class="meta">Sci-fi · Mystery</p>
+        </article>
+
+        <article class="card" data-type="tv" data-title="Wednesday">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg"
+              alt="Wednesday TV show poster"
+              loading="lazy"
+            >
+            <span class="poster-label">TV Show</span>
+          </div>
+          <h3>Wednesday</h3>
+          <p class="meta">Mystery · Comedy</p>
+        </article>
+
+        <article class="card" data-type="tv" data-title="The Queen's Gambit">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/zU0htwkhNvBQdVSIKB9s6hgVeFK.jpg"
+              alt="The Queen's Gambit TV show poster"
+              loading="lazy"
+            >
+            <span class="poster-label">TV Show</span>
+          </div>
+          <h3>The Queen's Gambit</h3>
+          <p class="meta">Drama · Period</p>
+        </article>
+
+        <article class="card" data-type="tv" data-title="Sherlock">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/7WTsnHkbA0FaG6R9twfFde0I9hl.jpg"
+              alt="Sherlock TV show poster"
+              loading="lazy"
+            >
+            <span class="poster-label">TV Show</span>
+          </div>
+          <h3>Sherlock</h3>
+          <p class="meta">Crime · Mystery</p>
+        </article>
+
+        <article class="card" data-type="tv" data-title="The Last of Us">
+          <div class="poster">
+            <img
+              src="https://image.tmdb.org/t/p/w500/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg"
+              alt="The Last of Us TV show poster"
+              loading="lazy"
+            >
+            <span class="poster-label">TV Show</span>
+          </div>
+          <h3>The Last of Us</h3>
+          <p class="meta">Drama · Sci-fi</p>
+        </article>
+
+        <!-- BOOKS -->
+
+        <article class="card" data-type="book" data-title="The Great Gatsby">
+          <div class="poster">
+            <img
+              src="https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg"
+              alt="The Great Gatsby book cover"
+              loading="lazy"
+            >
+            <span class="poster-label">Book</span>
+          </div>
+          <h3>The Great Gatsby</h3>
+          <p class="meta">F. Scott Fitzgerald · Classic</p>
+        </article>
+
+        <article class="card" data-type="book" data-title="Pride and Prejudice">
+          <div class="poster">
+            <img
+              src="https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg"
+              alt="Pride and Prejudice book cover"
+              loading="lazy"
+            >
+            <span class="poster-label">Book</span>
+          </div>
+          <h3>Pride and Prejudice</h3>
+          <p class="meta">Jane Austen · Romance</p>
+        </article>
+
+        <article class="card" data-type="book" data-title="The Hobbit">
+          <div class="poster">
+            <img
+              src="https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg"
+              alt="The Hobbit book cover"
+              loading="lazy"
+            >
+            <span class="poster-label">Book</span>
+          </div>
+          <h3>The Hobbit</h3>
+          <p class="meta">J. R. R. Tolkien · Fantasy</p>
+        </article>
+
+        <article class="card" data-type="book" data-title="The Book Thief">
+          <div class="poster">
+            <img
+              src="https://covers.openlibrary.org/b/isbn/9780375842207-L.jpg"
+              alt="The Book Thief book cover"
+              loading="lazy"
+            >
+            <span class="poster-label">Book</span>
+          </div>
+          <h3>The Book Thief</h3>
+          <p class="meta">Markus Zusak · Historical</p>
+        </article>
+
+        <article class="card" data-type="book" data-title="Little Women">
+          <div class="poster">
+            <img
+              src="https://covers.openlibrary.org/b/isbn/9780147514011-L.jpg"
+              alt="Little Women book cover"
+              loading="lazy"
+            >
+            <span class="poster-label">Book</span>
+          </div>
+          <h3>Little Women</h3>
+          <p class="meta">Louisa May Alcott · Classic</p>
+        </article>
+
+      </div>
+
+      <p class="no-results" id="noResults">
+        No titles found. Try another search.
+      </p>
+
+    </section>
+
+    <!-- SHOW SENSE CHATBOT -->
+
+    <section class="chat-section" id="chatbot">
+
+      <div class="chat-layout">
+
+        <div class="chat-intro">
+          <div class="eyebrow">
+            Meet your recommendation assistant
+          </div>
+
+          <h2>Not sure what to watch or read next?</h2>
+
+          <p>
+            Tell Show Sense what you enjoy, what mood you're in,
+            or what you loved recently. Discover movies, TV shows,
+            and books tailored to your interests.
+          </p>
+
+          <div class="feature">
+            <span>✦</span> Movie recommendations
+          </div>
+
+          <div class="feature">
+            <span>✦</span> TV show discoveries
+          </div>
+
+          <div class="feature">
+            <span>✦</span> Your next great read
+          </div>
+        </div>
+
+        <div class="chat-box">
+
+          <div class="chat-header">
+            <div class="chat-icon">✦</div>
+            <div>
+              <strong>Show Sense</strong>
+              <small>Your personal story finder</small>
+            </div>
+          </div>
+
+          <!-- Watsonx Orchestrate mounts the chatbot in this element. -->
+          <div id="root"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer>
+    <div>
+      <strong>showsense.</strong>
+      &nbsp; Stories for every mood.
+    </div>
+
+    <div>
+      Made for curious minds and endless stories.
+    </div>
+  </footer>
+
+  <!-- GALLERY SEARCH AND FILTERS -->
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const cards = [...document.querySelectorAll(".card")];
+    const filterButtons = document.querySelectorAll(".filter");
+    const noResults = document.getElementById("noResults");
+
+    let currentFilter = "all";
+
+    function filterGallery() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const title = card.dataset.title.toLowerCase();
+        const type = card.dataset.type;
+
+        const matchesSearch = title.includes(searchTerm);
+        const matchesFilter =
+          currentFilter === "all" || type === currentFilter;
+
+        const visible = matchesSearch && matchesFilter;
+
+        card.style.display = visible ? "" : "none";
+
+        if (visible) {
+          visibleCount++;
+        }
+      });
+
+      noResults.style.display =
+        visibleCount === 0 ? "block" : "none";
+    }
+
+    searchInput.addEventListener("input", filterGallery);
+
+    filterButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        filterButtons.forEach(item => {
+          item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+        currentFilter = button.dataset.filter;
+
+        filterGallery();
+      });
+    });
+  </script>
+
+  <!-- WATSONX ORCHESTRATE CHATBOT EMBED -->
+
+  <script>
+  window.wxOConfiguration = {
+    orchestrationID: "947bebe4a79048a0b202ac254d4f2e30_988e489b-b0c8-4bd3-a516-52cb77b46fbd",
+    hostURL: "https://au-syd.watson-orchestrate.cloud.ibm.com",
+    rootElementID: "root",
+    deploymentPlatform: "ibmcloud",
+    crn: "crn:v1:bluemix:public:watsonx-orchestrate:au-syd:a/947bebe4a79048a0b202ac254d4f2e30:988e489b-b0c8-4bd3-a516-52cb77b46fbd::",
+    chatOptions: {
+        agentId: "acc53fe9-2be3-441a-bba9-2ad682d596e4", 
+    }
+  };
+  setTimeout(function () {
+    const script = document.createElement('script');
+    script.src = `${window.wxOConfiguration.hostURL}/wxochat/wxoLoader.js?embed=true`;
+    script.addEventListener('load', function () {
+        wxoLoader.init();
+    });
+    document.head.appendChild(script);
+  }, 0);                     
+</script>
+</body>
+</html>
